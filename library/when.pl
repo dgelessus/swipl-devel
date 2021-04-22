@@ -214,7 +214,10 @@ when_goals(det(trigger_determined(X, Y, G))) -->
     (   { disj_goal(G, Disj, DG) }
     ->  disj_or(Disj, DG)
     ;   { G = when:trigger(C, Goal) }
-    ->  [ when((?=(X,Y),C), Goal) ]
+    ->  (   { disj_goal(Goal, Disj2, DG2) }
+        ->  disj_or(Disj2, DG2)
+        ;   [ when((?=(X,Y),C), Goal) ]
+        )
     ;   [ when(?=(X,Y), G) ]
     ).
 when_goals(call(Conj)) -->
@@ -231,14 +234,20 @@ when_goal(trigger_nonvar(X, G)) -->
     (   { disj_goal(G, Disj, DG) }
     ->  disj_or(Disj, DG)
     ;   { G = when:trigger(C, Goal) }
-    ->  [ when((nonvar(X),C), Goal) ]
+    ->  (   { disj_goal(Goal, Disj2, DG2) }
+        ->  disj_or(Disj2, DG2)
+        ;   [ when((nonvar(X),C), Goal) ]
+        )
     ;   [ when(nonvar(X),G) ]
     ).
 when_goal(trigger_ground(X, G)) -->
     (   { disj_goal(G, Disj, DG) }
     ->  disj_or(Disj, DG)
     ;   { G = when:trigger(C, Goal) }
-    ->  [ when((ground(X),C), Goal) ]
+    ->  (   { disj_goal(Goal, Disj2, DG2) }
+        ->  disj_or(Disj2, DG2)
+        ;   [ when((ground(X),C), Goal) ]
+        )
     ;   [ when(ground(X),G) ]
     ).
 when_goal(wake_det(_)) -->
